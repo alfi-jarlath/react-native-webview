@@ -79,6 +79,11 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
+import android.util.Log;
+
+
 /**
  * Manages instances of {@link WebView}
  * <p>
@@ -757,6 +762,57 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
         webView,
         new TopLoadingErrorEvent(webView.getId(), eventData));
     }
+
+    @Override
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+      String[] whitelist = { "https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake" };
+      // if the URL is in our whitelisted array, proceed
+      if (Arrays.asList(whitelist).contains(String.valueOf(error.getUrl()))) {
+        handler.proceed();
+      } else {
+        // handle and display error
+        int code = error.getPrimaryError();
+        String failingUrl = error.getUrl();
+        String description = "";
+
+        // https://developer.android.com/reference/android/net/http/SslError.html
+        switch (code) {
+          case SslError.SSL_DATE_INVALID:
+            description = "The date of the certificate is invalid";
+            break;
+          case SslError.SSL_EXPIRED:
+            description = "The certificate has expired";
+            break;
+          case SslError.SSL_IDMISMATCH:
+            description = "Hostname mismatch";
+            break;
+          case SslError.SSL_INVALID:
+            description = "A generic error occurred";
+            break;
+          case SslError.SSL_MAX_ERROR:
+            description = "The number of different SSL errors.";
+            break;
+          case SslError.SSL_NOTYETVALID:
+            description = "The certificate is not yet valid";
+            break;
+          case SslError.SSL_UNTRUSTED:
+            description = "The certificate authority is not trusted";
+            break;
+          default:
+            description = "Unknown SSL Error";
+            break;
+        }
+
+        handler.cancel();
+
+        this.onReceivedError(
+          view,
+          code,
+          description,
+          failingUrl
+        );
+      }
+    }    
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
