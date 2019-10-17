@@ -1,0 +1,1 @@
+"https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake"
