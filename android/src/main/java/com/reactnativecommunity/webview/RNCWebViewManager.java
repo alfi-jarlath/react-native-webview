@@ -68,12 +68,16 @@ import com.reactnativecommunity.webview.events.TopShouldStartLoadWithRequestEven
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -766,8 +770,11 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     @Override
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
       String[] whitelist = { "https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake" };
-      String[] whitelist_file = getResources().getIdentifier("whitelist","raw", getPackageName());
+
+
+      List<String> whitelist_file = Files.readAllLines(new File("res/raw/whitelist.txt").toPath(), Charset.defaultCharset() );
       Log.d("WHITELIST", String.valueOf(whitelist_file));
+
       // String[] whitelist = Helper.getConfigValue(this, "whitelist");
       // if the URL is in our whitelisted array, proceed
       if (Arrays.asList(whitelist).contains(String.valueOf(error.getUrl()))) {
