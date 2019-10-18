@@ -543,11 +543,13 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   @ReactProp(name = "whitelist")
   public void setWhitelist(
     WebView view,
-    String[] whitelist) {
-
+    @Nullable String[] whitelist) {
+    Log.d("WHITELIST", "Manager.setWhitelist");
     //TODO check for empty
     RNCWebViewModule module = getModule(reactContext);
+    Log.d("WHITELIST", "Manager got Context");
     module.setWhitelist(whitelist);
+    Log.d("WHITELIST", "Manager finish setWhitelist");
   }
 
 
