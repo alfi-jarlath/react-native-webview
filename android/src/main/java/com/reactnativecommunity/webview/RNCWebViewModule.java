@@ -406,9 +406,7 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
   }
 
   public void setWhitelist(String whitelist) {
-    Log.d("AL-111", "Module.setWhitelist");
     this.whitelist = whitelist;
-    Log.d("AL-111", "Module finish setWhitelist");
   }
 
   public String getWhitelist() {
