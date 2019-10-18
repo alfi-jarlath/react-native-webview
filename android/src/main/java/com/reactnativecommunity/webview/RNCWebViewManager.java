@@ -771,10 +771,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
       String[] whitelist = { "https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake" };
 
-
-      List<String> whitelist_file = Files.readAllLines(new File("res/raw/whitelist.txt").toPath(), Charset.defaultCharset() );
-      Log.d("WHITELIST", String.valueOf(whitelist_file));
-
       // String[] whitelist = Helper.getConfigValue(this, "whitelist");
       // if the URL is in our whitelisted array, proceed
       if (Arrays.asList(whitelist).contains(String.valueOf(error.getUrl()))) {
