@@ -46,7 +46,7 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
   private ValueCallback<Uri[]> filePathCallback;
   private Uri outputFileUri;
   private DownloadManager.Request downloadRequest;
-  private String[] whitelist;
+  private String whitelist;
   private PermissionListener webviewFileDownloaderPermissionListener = new PermissionListener() {
     @Override
     public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -405,13 +405,13 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
     return (PermissionAwareActivity) activity;
   }
 
-  public void setWhitelist(String[] whitelist) {
+  public void setWhitelist(String whitelist) {
     Log.d("AL-111", "Module.setWhitelist");
     this.whitelist = whitelist;
     Log.d("AL-111", "Module finish setWhitelist");
   }
 
-  public String[] getWhitelist() {
+  public String getWhitelist() {
     return this.whitelist;
   }
 }
