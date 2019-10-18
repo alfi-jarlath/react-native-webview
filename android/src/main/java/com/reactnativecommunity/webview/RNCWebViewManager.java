@@ -789,10 +789,11 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
       //String[] whitelist = { "https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake" };
       RNCWebViewModule module = getModule(reactContext);
       String whitelist = module.getWhitelist();
+      String[] separated = whitelist.split(",");
 
       // String[] whitelist = Helper.getConfigValue(this, "whitelist");
       // if the URL is in our whitelisted array, proceed
-      if (Arrays.asList(whitelist).contains(String.valueOf(error.getUrl()))) {
+      if (Arrays.asList(separated).contains(String.valueOf(error.getUrl()))) {
         handler.proceed();
       } else {
         // handle and display error
