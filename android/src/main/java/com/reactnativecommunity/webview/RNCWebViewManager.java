@@ -134,6 +134,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   // state and release page resources (including any running JavaScript).
   protected static final String BLANK_URL = "about:blank";
   protected WebViewConfig mWebViewConfig;
+  protected static ThemedReactContext reactContext;
 
   protected RNCWebChromeClient mWebChromeClient = null;
   protected boolean mAllowsFullscreenVideo = false;
@@ -170,6 +171,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   @Override
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   protected WebView createViewInstance(ThemedReactContext reactContext) {
+    this.reactContext = reactContext;
     RNCWebView webView = createRNCWebViewInstance(reactContext);
     setupWebChromeClient(reactContext, webView);
     reactContext.addLifecycleEventListener(webView);
@@ -538,6 +540,17 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     ((RNCWebView) view).setHasScrollEvent(hasScrollEvent);
   }
 
+  @ReactProp(name = "whitelist")
+  public void setWhitelist(
+    WebView view,
+    String[] whitelist) {
+
+    //TODO check for empty
+    RNCWebViewModule module = getModule(reactContext);
+    module.setWhitelist(whitelist);
+  }
+
+
   @Override
   protected void addEventEmitters(ThemedReactContext reactContext, WebView view) {
     // Do not register default touch emitter and let WebView implementation handle touches
@@ -770,7 +783,9 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
     @Override
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-      String[] whitelist = { "https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake" };
+      //String[] whitelist = { "https://maestro.galgorm.com:45900/sg/resv", "https://maestro.galgorm.com:45900/spa/startIntake" };
+      RNCWebViewModule module = getModule(reactContext);
+      String[] whitelist = module.getWhitelist();
 
       // String[] whitelist = Helper.getConfigValue(this, "whitelist");
       // if the URL is in our whitelisted array, proceed
