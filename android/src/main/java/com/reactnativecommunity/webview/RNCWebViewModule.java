@@ -37,7 +37,7 @@ import static android.app.Activity.RESULT_OK;
 
 @ReactModule(name = RNCWebViewModule.MODULE_NAME)
 public class RNCWebViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
-  public static final String MODULE_NAME = "RNCWebView";
+  public static final String MODULE_NAME = "RNCWebViewCustom";
   private static final int PICKER = 1;
   private static final int PICKER_LEGACY = 3;
   private static final int FILE_DOWNLOAD_PERMISSION_REQUEST = 1;
@@ -75,6 +75,11 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
   @Override
   public String getName() {
     return MODULE_NAME;
+  }
+
+  @Override
+  public boolean canOverrideExistingModule() {
+    return true;
   }
 
   @ReactMethod
@@ -401,9 +406,9 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
   }
 
   public void setWhitelist(String[] whitelist) {
-    Log.d("WHITELIST", "Module.setWhitelist");
+    Log.d("AL-111", "Module.setWhitelist");
     this.whitelist = whitelist;
-    Log.d("WHITELIST", "Module finish setWhitelist");
+    Log.d("AL-111", "Module finish setWhitelist");
   }
 
   public String[] getWhitelist() {
