@@ -1,27 +1,15 @@
 import React from 'react';
-import { AndroidWebViewProps, NativeWebViewAndroid, State } from './WebViewTypes';
-/**
- * Renders a native WebView.
- */
-declare class WebView extends React.Component<AndroidWebViewProps, State> {
+import { MacOSWebViewProps, NativeWebViewMacOS, State } from './WebViewTypes';
+declare class WebView extends React.Component<MacOSWebViewProps, State> {
     static defaultProps: {
-        overScrollMode: string;
         javaScriptEnabled: boolean;
-        thirdPartyCookiesEnabled: boolean;
-        scalesPageToFit: boolean;
-        allowsFullscreenVideo: boolean;
-        allowFileAccess: boolean;
-        saveFormDataDisabled: boolean;
         cacheEnabled: boolean;
-        androidHardwareAccelerationDisabled: boolean;
         originWhitelist: string[];
+        useSharedProcessPool: boolean;
     };
-    static isFileUploadSupported: () => Promise<any>;
-    startUrl: string | null;
+    static isFileUploadSupported: () => Promise<boolean>;
     state: State;
-    webViewRef: React.RefObject<NativeWebViewAndroid>;
-    messagingModuleName: string;
-    componentDidMount: () => void;
+    webViewRef: React.RefObject<NativeWebViewMacOS>;
     getCommands: () => {
         goForward: number;
         goBack: number;
@@ -31,19 +19,38 @@ declare class WebView extends React.Component<AndroidWebViewProps, State> {
         injectJavaScript: number;
         loadUrl: number;
         requestFocus: number;
-        clearHistory: number;
-        clearCache: number;
-        clearFormData: number;
     };
+    /**
+     * Go forward one page in the web view's history.
+     */
     goForward: () => void;
+    /**
+     * Go back one page in the web view's history.
+     */
     goBack: () => void;
+    /**
+     * Reloads the current page.
+     */
     reload: () => void;
+    /**
+     * Stop loading the current page.
+     */
     stopLoading: () => void;
+    /**
+     * Request focus on WebView rendered page.
+     */
     requestFocus: () => void;
+    /**
+     * Posts a message to the web view, which will emit a `message` event.
+     * Accepts one argument, `data`, which must be a string.
+     *
+     * In your webview, you'll need to something like the following.
+     *
+     * ```js
+     * document.addEventListener('message', e => { document.title = e.data; });
+     * ```
+     */
     postMessage: (data: string) => void;
-    clearFormData: () => void;
-    clearCache: (includeDiskFiles: boolean) => void;
-    clearHistory: () => void;
     /**
      * Injects a javascript string into the referenced WebView. Deliberately does not
      * return a response because using eval() to return a response breaks this method
@@ -66,8 +73,11 @@ declare class WebView extends React.Component<AndroidWebViewProps, State> {
     onLoadingFinish: (event: import("react-native").NativeSyntheticEvent<import("./WebViewTypes").WebViewNavigation>) => void;
     onMessage: (event: import("react-native").NativeSyntheticEvent<import("./WebViewTypes").WebViewMessage>) => void;
     onLoadingProgress: (event: import("react-native").NativeSyntheticEvent<import("./WebViewTypes").WebViewNativeProgressEvent>) => void;
-    onShouldStartLoadWithRequestCallback: (shouldStart: boolean, url: string) => void;
+    onShouldStartLoadWithRequestCallback: (shouldStart: boolean, _url: string, lockIdentifier: number) => void;
+    onContentProcessDidTerminate: (event: import("react-native").NativeSyntheticEvent<import("./WebViewTypes").WebViewNativeEvent>) => void;
+    componentDidUpdate(prevProps: MacOSWebViewProps): void;
+    showRedboxOnPropChanges(prevProps: MacOSWebViewProps, propName: keyof MacOSWebViewProps): void;
     render(): JSX.Element;
 }
 export default WebView;
-//# sourceMappingURL=WebView.android.d.ts.map
+//# sourceMappingURL=WebView.macos.d.ts.map
